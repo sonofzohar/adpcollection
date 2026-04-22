@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADP Collection — Raya Collection 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  :root {
+    --gold: #C5A059;
+    --gold-light: #E5D5C5;
+    --ivory: #FAF9F6;
+    --charcoal: #1A1A1A;
+    --text-muted: #757575;
+    --white: #FFFFFF;
+    --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    --ai-gradient: linear-gradient(135deg, #C5A059 0%, #1A1A1A 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--charcoal); overflow-x: hidden; line-height: 1.6; }
+
+  /* NAVIGATION */
+  nav {
+    background: rgba(255,255,255,0.98);
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 90px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    backdrop-filter: blur(15px);
+  }
+  .nav-brand { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; cursor: pointer; color: var(--charcoal); }
+  .nav-links { display: flex; gap: 3rem; position: absolute; left: 50%; transform: translateX(-50%); }
+  .nav-links a { color: var(--charcoal); font-size: 0.8rem; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; font-weight: 500; transition: var(--transition); }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-actions { display: flex; gap: 1.5rem; align-items: center; }
+
+  .icon-btn { background: none; border: none; cursor: pointer; position: relative; font-size: 1.2rem; color: var(--charcoal); transition: var(--transition); }
+  .icon-btn:hover { color: var(--gold); }
+  .cart-count { position: absolute; top: -8px; right: -12px; background: var(--gold); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    background: var(--ivory);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-overlay { position: absolute; inset: 0; background: radial-gradient(circle, rgba(197,160,89,0.05) 0%, rgba(0,0,0,0) 70%); }
+  .hero-content { position: relative; z-index: 2; text-align: center; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: 12vw; font-weight: 900; line-height: 0.8; letter-spacing: -8px; color: var(--charcoal); opacity: 0.95; margin-bottom: 2rem; }
+  .hero-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: 2rem; color: var(--gold); margin-top: -2rem; }
+  .hero-model-box { position: absolute; right: -5%; bottom: 0; height: 90vh; pointer-events: none; opacity: 0.8; filter: contrast(1.1); }
+  .hero-cta { position: absolute; bottom: 10%; left: 5%; text-align: left; max-width: 400px; }
+  .btn-gold { background: var(--charcoal); color: var(--white); border: none; padding: 1.2rem 3rem; border-radius: 0; font-weight: 700; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; transition: var(--transition); border: 1px solid var(--charcoal); }
+  .btn-gold:hover { background: transparent; color: var(--charcoal); }
+
+  /* CATALOG PAGE */
+  .container { padding: 8rem 5%; max-width: 1600px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 6rem; }
+  .section-header h2 { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 400; color: var(--charcoal); }
+  .section-header p { text-transform: uppercase; letter-spacing: 5px; font-size: 0.7rem; color: var(--gold); margin-bottom: 1rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 4rem 2rem; }
+  .product-card { position: relative; cursor: pointer; transition: var(--transition); }
+  .img-box { height: 500px; background: #F5F5F5; overflow: hidden; margin-bottom: 1.5rem; position: relative; }
+  .model-photo { width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s ease; }
+  .product-card:hover .model-photo { transform: scale(1.05); }
+  .ai-tag { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--ai-gradient); color: white; padding: 6px 15px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+  .product-info { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .product-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700; }
+  .product-price { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
+
+  /* MODALS */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.99); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 2rem; overflow-y: auto; }
+  .modal-overlay.open { display: flex; }
+  .modal-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; max-width: 1400px; width: 100%; position: relative; }
+  .modal-left { height: 80vh; background: #eee; position: relative; overflow: hidden; }
+  
+  .ai-panel { background: #fafafa; padding: 3rem; border: 1px solid #eee; }
+  .ai-header { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 2rem; border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
+  .ai-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+  .ai-opt-btn { padding: 1rem; border: 1px solid #ddd; background: white; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); }
+  .ai-opt-btn.active { background: var(--charcoal); color: white; border-color: var(--charcoal); }
+
+  /* ADMIN */
+  .admin-login { min-height: 80vh; display: flex; align-items: center; justify-content: center; }
+  .login-card { background: var(--ivory); padding: 4rem; width: 100%; max-width: 450px; text-align: center; border: 1px solid #E5D5C5; }
+  .login-card h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 2rem; letter-spacing: -1px; }
+  .input-lux { width: 100%; padding: 1.2rem; border: 1px solid #ddd; margin-bottom: 1.5rem; outline: none; background: white; font-family: inherit; font-size: 1rem; text-align: center; }
+
+  .report-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 4rem; }
+  .stat-card { background: white; border: 1px solid #eee; padding: 2rem; text-align: center; }
+  .stat-card span { display: block; font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); }
+  .stat-card label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+
+  .dl-btn { background: #eee; border: 1px solid #ddd; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; transition: 0.3s; margin-left: 10px; }
+  .dl-btn:hover { background: var(--gold); color: white; border-color: var(--gold); }
+
+  .color-check-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; text-align: left; }
+  .color-check-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; cursor: pointer; }
+  .img-preview-box { width: 100%; height: 180px; background: #f9f9f9; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; position: relative; overflow: hidden; }
+  .img-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--charcoal); color: white; padding: 1.2rem 2.5rem; font-size: 0.8rem; letter-spacing: 1px; z-index: 3000; transform: translateY(150px); transition: var(--transition); }
+  .toast.show { transform: translateY(0); }
+
+  footer { background: var(--charcoal); color: var(--white); padding: 8rem 5% 4rem; text-align: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 2rem; }
+
+  @media print {
+    nav, footer, .dl-btn, .ai-opt-btn, #nav-admin, .nav-actions, .admin-prod-list { display: none !important; }
+    .report-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .loading-container { position: fixed; inset: 0; background: var(--white); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
+  .loading-spinner { width: 50px; height: 50px; border: 3px solid #eee; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="loading-container" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <p style="margin-top: 20px; font-family: 'Playfair Display', serif; letter-spacing: 3px;">ADP COLLECTION</p>
+</div>
+
+<nav>
+  <div class="nav-brand" onclick="showPage('home')">ADP.</div>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Beranda</a>
+    <a onclick="showPage('catalog')" id="nav-catalog">ADP Collection</a>
+    <a onclick="showPage('admin')" id="nav-admin" style="display: none;">Manajemen</a>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" onclick="showPage('admin')" title="Admin Access">
+      <i class="fas fa-lock"></i>
+    </button>
+    <button class="icon-btn" onclick="toggleCart()">
+      <i class="fas fa-shopping-bag"></i> <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="homePage">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-title">ADP</div>
+    <div class="hero-subtitle">Collection 2026</div>
+  </div>
+  <div class="hero-model-box">
+    <img src="https://images.unsplash.com/photo-1583394238235-941e99d03a11?auto=format&fit=crop&q=80&w=800" alt="Model Raya">
+  </div>
+  <div class="hero-cta">
+    <p style="text-transform:uppercase; letter-spacing:4px; font-size:0.7rem; margin-bottom:1.5rem; color:var(--text-muted)">Mahakarya Keanggunan untuk Hari Kemenangan.</p>
+    <button class="btn-gold" onclick="showPage('catalog')">Mulai Eksplorasi</button>
+  </div>
+</section>
+
+<div class="container">
+  
+  <!-- CATALOG PAGE -->
+  <div id="catalogPage" style="display:none">
+    <div class="section-header">
+      <p>Mahkota Indah Muslimah Modern</p>
+      <h2>Exclusive Collection</h2>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:3rem; margin-bottom:5rem">
+      <button class="ai-opt-btn active" id="f-all" onclick="filterCat('all', this)">Semua Koleksi</button>
+      <button class="ai-opt-btn" onclick="filterCat('scarf', this)">Exclusive Scarf</button>
+      <button class="ai-opt-btn" onclick="filterCat('parfume', this)">Eau De Parfume</button>
+    </div>
+
+    <div class="grid" id="productGrid"></div>
+  </div>
+
+  <!-- ADMIN PAGE -->
+  <div id="adminPage" style="display:none; padding-top:100px">
+    <!-- Login Area -->
+    <div id="adminAuth" class="admin-login">
+      <div class="login-card">
+        <h2>Admin Login</h2>
+        <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 2rem;">Akses Terbatas Manajemen</p>
+        <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+          <input type="password" id="adminPass" class="input-lux" placeholder="Masukkan Password Keamanan" required>
+          <button type="submit" class="btn-gold" style="width:100%">Masuk Panel</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Dashboard Area -->
+    <div id="adminDashboard" style="display:none">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4rem">
+        <h2 style="font-family:'Playfair Display',serif">Laporan Operasional</h2>
+        <div>
+          <button class="dl-btn" onclick="downloadExcel()">Download Excel</button>
+          <button class="dl-btn" onclick="window.print()">Download PDF</button>
+          <button class="ai-opt-btn" onclick="handleLogout()" style="margin-left:20px">Keluar</button>
+        </div>
+      </div>
+
+      <div class="report-grid">
+        <div class="stat-card"><span id="stTotal">Rp 0</span><label>Omzet Total</label></div>
+        <div class="stat-card"><span id="stOrders">0</span><label>Total Pesanan</label></div>
+        <div class="stat-card"><span id="stScarf">0</span><label>Scarf Terjual</label></div>
+        <div class="stat-card"><span id="stParfume">0</span><label>Parfum Terjual</label></div>
+      </div>
+
+      <div class="admin-prod-list" style="background:var(--ivory); padding:3rem; border:1px solid #E5D5C5">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem">
+          <h3 style="font-family:'Playfair Display',serif">Daftar Produk Aktif</h3>
+          <button class="btn-gold" style="padding:0.6rem 1.5rem; font-size:0.6rem" onclick="openAdminModal(null)">+ Tambah Produk</button>
+        </div>
+        <table style="width:100%; border-collapse:collapse; text-align:left">
+          <thead style="border-bottom:2px solid var(--charcoal)">
+            <tr><th style="padding:1rem">Nama Produk</th><th style="padding:1rem">Kategori</th><th style="padding:1rem">Harga</th><th style="padding:1rem">Aksi</th></tr>
+          </thead>
+          <tbody id="adminProdBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal-content">
+    <button style="position:absolute; top:0; right:0; background:none; border:none; font-size:2.5rem; cursor:pointer" onclick="closeModal()">✕</button>
+    <div class="modal-left" id="mLeft">
+      <div id="aiLoader" style="position:absolute; inset:0; background:rgba(255,255,255,0.9); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:10">
+        <div style="width:40px; height:40px; border:3px solid #eee; border-top:3px solid var(--gold); border-radius:50%; animation:spin 1s linear infinite"></div>
+        <p style="margin-top:1rem; font-size:0.7rem; letter-spacing:2px">AI SEDANG MENDESAIN...</p>
+      </div>
+      <img src="" id="mImg" class="model-photo" style="width:100%; height:100%; object-fit:cover">
+    </div>
+    <div class="modal-right">
+      <div class="ai-panel">
+        <div id="mBadge" class="ai-tag" style="position:static; display:inline-block; margin-bottom:1rem">EXQUISITE</div>
+        <h1 style="font-family:'Playfair Display',serif; font-size:3rem; margin-bottom:1rem" id="mTitle">Produk</h1>
+        <div style="font-size:1.5rem; color:var(--gold); margin-bottom:2rem" id="mPrice">Rp 0</div>
+        
+        <div id="scarfControls">
+          <div class="ai-header">✨ AI Scarf Visualizer</div>
+          <p style="font-size:0.7rem; letter-spacing:1px; margin-bottom:1rem">Pilihan Warna Tersedia:</p>
+          <div id="mColorsDisplay" style="display:flex; gap:10px; margin-bottom:1.5rem; flex-wrap:wrap"></div>
+          <div class="ai-options-grid">
+            <button class="ai-opt-btn active" onclick="setAIStyle('Royal Palace Motif', this)">Royal Palace</button>
+            <button class="ai-opt-btn" onclick="setAIStyle('Heritage Gold Ornamen', this)">Heritage Gold</button>
+            <button class="ai-opt-btn" onclick="setAIStyle('Floral Magnolia', this)">Magnolia Raya</button>
+          </div>
+          <button class="btn-gold" style="width:100%; padding:1rem" onclick="generateAI()">🪄 Generate Visualisasi AI</button>
+        </div>
+
+        <div id="parfumeDetails" style="display:none">
+          <div class="ai-header">💎 Scent Profiles</div>
+          <div style="display:grid; gap:1.5rem">
+            <div><strong style="font-size:0.7rem; letter-spacing:1px">TOP NOTES:</strong><p id="mTop" style="color:var(--text-muted)"></p></div>
+            <div><strong style="font-size:0.7rem; letter-spacing:1px">MIDDLE NOTES:</strong><p id="mMid" style="color:var(--text-muted)"></p></div>
+            <div><strong style="font-size:0.7rem; letter-spacing:1px">BASE NOTES:</strong><p id="mBase" style="color:var(--text-muted)"></p></div>
+          </div>
+        </div>
+
+        <button class="btn-gold" style="width:100%; margin-top:2rem" onclick="simulateSale()">Tambahkan ke Pesanan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN ADD/EDIT MODAL -->
+<div class="modal-overlay" id="adminProductModal">
+  <div class="modal-content" style="max-width:800px; grid-template-columns:1fr; background:white; padding:3rem; border-radius:0;">
+    <h2 id="admModalTitle" style="font-family:'Playfair Display',serif; margin-bottom:2rem">Edit Produk</h2>
+    <input type="hidden" id="editId">
+    
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem">
+      <div>
+        <label style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block">Nama & Kategori</label>
+        <input type="text" id="editName" class="input-lux" placeholder="Nama Produk">
+        <select id="editCat" class="input-lux" onchange="toggleAdminFields()">
+          <option value="scarf">Scarf</option>
+          <option value="parfume">Parfume</option>
+        </select>
+        
+        <label style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block">Harga (IDR)</label>
+        <input type="number" id="editPrice" class="input-lux" placeholder="Harga (IDR)">
+        
+        <label style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block">Deskripsi</label>
+        <textarea id="editDesc" class="input-lux" placeholder="Deskripsi Singkat" style="height:80px"></textarea>
+      </div>
+
+      <div>
+        <label style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; display:block">Foto Produk</label>
+        <div class="img-preview-box" id="imgPreview"><p id="previewPlaceholder">Belum ada foto</p></div>
+        <input type="file" id="editImgFile" accept="image/*" style="display:none" onchange="previewImage(this)">
+        <button class="dl-btn" style="width:100%; margin-left:0; margin-bottom:1.5rem" onclick="document.getElementById('editImgFile').click()">Upload Foto</button>
+
+        <div id="adminScarfFields">
+          <label style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; display:block">Pilihan Warna Stok</label>
+          <div class="color-check-grid" id="colorChecklist"></div>
+        </div>
+
+        <div id="adminPerfumeFields" style="display:none">
+          <label style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block">Aroma (Scent Notes)</label>
+          <input type="text" id="editTop" class="input-lux" placeholder="Top Notes">
+          <input type="text" id="editMid" class="input-lux" placeholder="Middle Notes">
+          <input type="text" id="editBase" class="input-lux" placeholder="Base Notes">
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:2rem">
+      <button class="btn-gold" id="btnSave" style="flex:1" onclick="saveProduct()">Simpan Perubahan</button>
+      <button class="btn-gold" style="flex:1; background:#eee; color:black; border-color:#ddd" onclick="closeAdminModal()">Batal</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Notifikasi</div>
+
+<footer>
+  <div class="footer-logo">ADP Collection.</div>
+  <p style="font-size:0.3rem; letter-spacing:3px; opacity:0.4">© 2026 ADP COLLECTION BY ADP STUDIO. ALL RIGHTS RESERVED.</p>
+</footer>
+
+<script type="module">
+// IMPORT SUPABASE (Lebih stabil & GRATIS)
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+// --- KONFIGURASI SUPABASE ---
+// CATATAN: Masukkan URL dan ANON KEY milik Anda di bawah ini:
+const SUPABASE_URL = ""; 
+const SUPABASE_KEY = "Miu12345"; 
+
+const isSupabaseReady = SUPABASE_URL !== "" && SUPABASE_KEY !== "";
+const supabase = isSupabaseReady ? createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+let products = [];
+let sales = [];
+let currentUploadedImg = "";
+const apiKey = ""; // API Gemini Key
+let cartCount = 0;
+
+const THEME_COLORS = {
+  'Cream': '#F5E6D3', 'Beige': '#D4C4B5', 'Mauve': '#9B849E', 'Black': '#1A1A1A', 
+  'Navy': '#1A2744', 'Olive': '#556B2F', 'Terracotta': '#B35A44', 'White': '#FFFFFF', 
+  'Silver': '#C0C0C0', 'Gold': '#C5A059'
+};
+
+const loaderTimeout = setTimeout(() => hideLoader(), 5000);
+
+function hideLoader() {
+    const loader = document.getElementById('loadingScreen');
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+    }
+}
+
+async function initApp() {
+    if (isSupabaseReady) {
+        try {
+            const { data: prodData } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+            if (prodData) products = prodData;
+            const { data: salesData } = await supabase.from('sales').select('*');
+            if (salesData) sales = salesData;
+        } catch (e) { console.warn("Supabase Error:", e); }
+    } else {
+        // Data Dummy
+        products = [
+            { id: 1, name: 'Magnolia Raya Scarf', cat: 'scarf', price: 249000, img: 'https://images.unsplash.com/photo-1583394238235-941e99d03a11?auto=format&fit=crop&q=80&w=600', badge: 'RAYA SERIES', desc: 'Motif bunga magnolia elegan.', colors: ['Cream', 'White'] }
+        ];
+    }
+    
+    checkAdminLink();
+    renderUI();
+    hideLoader();
+    clearTimeout(loaderTimeout);
+}
+
+function checkAdminLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') === 'true') {
+    const navAdmin = document.getElementById('nav-admin');
+    if(navAdmin) navAdmin.style.display = 'inline-block';
+  }
+}
+
+function renderUI() {
+    const isCatalog = document.getElementById('catalogPage').style.display === 'block';
+    const isHome = document.getElementById('homePage').style.display === 'flex';
+    if(isCatalog || isHome) renderGrid(products);
+    
+    const isAdmin = document.getElementById('adminDashboard') && document.getElementById('adminDashboard').style.display === 'block';
+    if(isAdmin) renderAdminList();
+
+    updateReports();
+}
+
+// NAVIGATION
+window.showPage = function(page) {
+  const sections = ['homePage', 'catalogPage', 'adminPage'];
+  sections.forEach(s => {
+      const el = document.getElementById(s);
+      if(el) el.style.display = 'none';
+  });
+  
+  const target = document.getElementById(page === 'home' ? 'homePage' : page + 'Page');
+  if(target) target.style.display = page === 'home' ? 'flex' : 'block';
+
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navId = 'nav-' + page;
+  if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
+  
+  renderUI();
+  window.scrollTo(0,0);
+}
+
+function renderGrid(data) {
+  const grid = document.getElementById('productGrid');
+  if(!grid) return;
+  grid.innerHTML = data.length ? data.map(p => `
+    <div class="product-card" onclick="openProduct('${p.id}')">
+      <div class="img-box">
+        <div class="ai-tag">${p.badge || 'RAYA'}</div>
+        <img src="${p.img}" class="model-photo" onerror="this.src='https://via.placeholder.com/500x600?text=No+Image'">
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">Rp ${Number(p.price || 0).toLocaleString()}</div>
+      </div>
+    </div>
+  `).join('') : '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #999;">Belum ada koleksi produk tersedia.</div>';
+}
+
+window.filterCat = function(cat, btn) {
+  document.querySelectorAll('.ai-opt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if(cat === 'all') renderGrid(products);
+  else renderGrid(products.filter(p => p.cat === cat));
+}
+
+window.previewImage = function(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentUploadedImg = e.target.result;
+      document.getElementById('imgPreview').innerHTML = `<img src="${currentUploadedImg}">`;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+window.openProduct = function(id) {
+  const p = products.find(x => String(x.id) === String(id));
+  if(!p) return;
+  const m = document.getElementById('productModal');
+  document.getElementById('mTitle').innerText = p.name;
+  document.getElementById('mPrice').innerText = `Rp ${Number(p.price || 0).toLocaleString()}`;
+  document.getElementById('mBadge').innerText = p.badge || 'RAYA';
+  document.getElementById('mImg').src = p.img;
+  
+  const scarfUI = document.getElementById('scarfControls');
+  const perfumeUI = document.getElementById('parfumeDetails');
+
+  if(p.cat === 'scarf') {
+    scarfUI.style.display = 'block';
+    perfumeUI.style.display = 'none';
+    document.getElementById('mColorsDisplay').innerHTML = (p.colors || []).map(c => `
+      <div style="background:${THEME_COLORS[c]}; width:30px; height:30px; border-radius:50%; border:1px solid #ddd;" title="${c}"></div>
+    `).join('') || '<p style="font-size:0.7rem; color:#999">Warna standar</p>';
+  } else {
+    scarfUI.style.display = 'none';
+    perfumeUI.style.display = 'block';
+    document.getElementById('mTop').innerText = p.top || '-';
+    document.getElementById('mMid').innerText = p.mid || '-';
+    document.getElementById('mBase').innerText = p.base || '-';
+  }
+  m.classList.add('open');
+}
+
+window.closeModal = function() { document.getElementById('productModal').classList.remove('open'); }
+
+// SALES RECORDING
+window.simulateSale = async function() {
+    const m = document.getElementById('productModal');
+    const pName = document.getElementById('mTitle').innerText;
+    const pPrice = parseInt(document.getElementById('mPrice').innerText.replace(/[^0-9]/g, ''));
+    
+    const saleData = {
+        customer: "Customer",
+        product: pName,
+        total: pPrice,
+        date: new Date().toISOString().split('T')[0]
+    };
+
+    if (isSupabaseReady) {
+        await supabase.from('sales').insert([saleData]);
+        const { data: salesData } = await supabase.from('sales').select('*');
+        if(salesData) sales = salesData;
+    } else {
+        sales.push(saleData);
+    }
+    
+    cartCount++;
+    document.getElementById('cartCount').innerText = cartCount;
+    showToast("Pesanan Berhasil Dicatat!");
+    updateReports();
+    closeModal();
+}
+
+function updateReports() {
+    const total = sales.reduce((s, o) => s + (o.total || 0), 0);
+    const scarfCount = sales.filter(s => s.product.toLowerCase().includes('scarf')).length;
+    const perfumeCount = sales.filter(s => !s.product.toLowerCase().includes('scarf')).length;
+
+    if(document.getElementById('stTotal')) {
+        document.getElementById('stTotal').innerText = `Rp ${total.toLocaleString()}`;
+        document.getElementById('stOrders').innerText = sales.length;
+        document.getElementById('stScarf').innerText = scarfCount;
+        document.getElementById('stParfume').innerText = perfumeCount;
+    }
+}
+
+// ADMIN DASHBOARD
+function renderAdminUI() {
+    const isLoggedIn = sessionStorage.getItem('adp_admin_logged');
+    if (isLoggedIn === 'true') {
+        document.getElementById('adminAuth').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        renderAdminList();
+    } else {
+        document.getElementById('adminAuth').style.display = 'flex';
+        document.getElementById('adminDashboard').style.display = 'none';
+    }
+}
+
+window.handleLogin = function() {
+  const pass = document.getElementById('adminPass').value;
+  if(pass === 'admin123') {
+    sessionStorage.setItem('adp_admin_logged', 'true');
+    renderAdminUI();
+    showToast("Akses Diterima.");
+    updateReports();
+  } else showToast("Password Salah!");
+}
+
+window.handleLogout = function() {
+    sessionStorage.removeItem('adp_admin_logged');
+    renderAdminUI();
+    showToast("Berhasil Keluar.");
+}
+
+function renderAdminList() {
+  const body = document.getElementById('adminProdBody');
+  if(!body) return;
+  body.innerHTML = products.map(p => `
+    <tr>
+      <td style="padding:1.5rem 1rem"><strong>${p.name}</strong></td>
+      <td style="padding:1.5rem 1rem; text-transform:uppercase; font-size:0.7rem; color:var(--gold)">${p.cat}</td>
+      <td style="padding:1.5rem 1rem">Rp ${Number(p.price || 0).toLocaleString()}</td>
+      <td style="padding:1.5rem 1rem">
+        <button onclick="openAdminModal('${p.id}')" style="border:none; background:none; cursor:pointer; font-size:1rem; margin-right:15px"><i class="fas fa-edit"></i></button>
+        <button onclick="deleteProduct('${p.id}')" style="border:none; background:none; cursor:pointer; color:red; font-size:1rem"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+window.toggleAdminFields = function() {
+  const cat = document.getElementById('editCat').value;
+  document.getElementById('adminScarfFields').style.display = cat === 'scarf' ? 'block' : 'none';
+  document.getElementById('adminPerfumeFields').style.display = cat === 'parfume' ? 'block' : 'none';
+}
+
+window.openAdminModal = function(id) {
+  if (sessionStorage.getItem('adp_admin_logged') !== 'true') return showToast("Akses ditolak.");
+  const p = id ? products.find(x => String(x.id) === String(id)) : null;
+  document.getElementById('admModalTitle').innerText = p ? "Edit Produk" : "Tambah Produk Baru";
+  document.getElementById('editId').value = p ? p.id : "";
+  document.getElementById('editName').value = p ? p.name : "";
+  document.getElementById('editCat').value = p ? p.cat : "scarf";
+  document.getElementById('editPrice').value = p ? p.price : "";
+  document.getElementById('editDesc').value = p ? p.desc : "";
+  document.getElementById('editTop').value = p ? (p.top || "") : "";
+  document.getElementById('editMid').value = p ? (p.mid || "") : "";
+  document.getElementById('editBase').value = p ? (p.base || "") : "";
+  
+  currentUploadedImg = p ? p.img : "";
+  document.getElementById('imgPreview').innerHTML = currentUploadedImg ? `<img src="${currentUploadedImg}">` : `<p>Belum ada foto</p>`;
+
+  const checklist = document.getElementById('colorChecklist');
+  checklist.innerHTML = Object.keys(THEME_COLORS).map(c => `
+    <label class="color-check-item">
+      <input type="checkbox" name="productColors" value="${c}" ${(p && p.colors && p.colors.includes(c)) ? 'checked' : ''}>
+      <span style="background:${THEME_COLORS[c]}; width:12px; height:12px; border-radius:50%; border:1px solid #ddd"></span> ${c}
+    </label>
+  `).join('');
+
+  toggleAdminFields();
+  document.getElementById('adminProductModal').classList.add('open');
+}
+
+window.saveProduct = async function() {
+  const id = document.getElementById('editId').value;
+  const name = document.getElementById('editName').value;
+  const cat = document.getElementById('editCat').value;
+  const price = parseInt(document.getElementById('editPrice').value);
+  const desc = document.getElementById('editDesc').value;
+  
+  if(!name || !price) return showToast("Data belum lengkap");
+
+  const selectedColors = [];
+  document.querySelectorAll('input[name="productColors"]:checked').forEach(cb => selectedColors.push(cb.value));
+
+  const productData = {
+    name, cat, price, desc, colors: selectedColors,
+    img: currentUploadedImg || 'https://via.placeholder.com/600x800?text=No+Image',
+    top: document.getElementById('editTop').value,
+    mid: document.getElementById('editMid').value,
+    base: document.getElementById('editBase').value
+  };
+
+  if (isSupabaseReady) {
+      if (id) {
+          await supabase.from('products').update(productData).eq('id', id);
+      } else {
+          await supabase.from('products').insert([productData]);
+      }
+      const { data: prodData } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+      if (prodData) products = prodData;
+  } else {
+      if (id) {
+          const idx = products.findIndex(x => String(x.id) === String(id));
+          products[idx] = { ...products[idx], ...productData };
+      } else {
+          products.push({ id: Date.now(), ...productData });
+      }
+  }
+  
+  showToast("Berhasil disimpan ✓");
+  closeAdminModal();
+  renderUI();
+}
+
+window.deleteProduct = async function(id) {
+  if(confirm("Hapus produk ini?")) {
+      if (isSupabaseReady) {
+          await supabase.from('products').delete().eq('id', id);
+          const { data: prodData } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+          if (prodData) products = prodData;
+      } else {
+          products = products.filter(x => String(x.id) !== String(id));
+      }
+      showToast("Terhapus ✓");
+      renderUI();
+  }
+}
+
+window.closeAdminModal = function() { document.getElementById('adminProductModal').classList.remove('open'); }
+
+window.downloadExcel = function() {
+  const rows = sales.map(s => `${s.id || 'N/A'},${s.customer},${s.product},${s.total},${s.date}`).join("\n");
+  const encodedUri = encodeURI("data:text/csv;charset=utf-8,ID,Customer,Product,Total,Date\n" + rows);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "Report_ADP_2026.csv");
+  document.body.appendChild(link);
+  link.click();
+}
+
+window.toggleCart = function() { showToast(`Keranjang: ${cartCount} item`); }
+window.showToast = function(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+
+// AI ENGINE
+window.generateAI = async function() {
+  const loader = document.getElementById('aiLoader');
+  const imgEl = document.getElementById('mImg');
+  loader.style.display = 'flex';
+  
+  try {
+    const responseImg = await fetch(imgEl.src);
+    const blob = await responseImg.blob();
+    const reader = new FileReader();
+    const base64Data = await new Promise((res) => {
+        reader.onloadend = () => res(reader.result.split(',')[1]);
+        reader.readAsDataURL(blob);
+    });
+
+    const prompt = `Change the hijab scarf motif to "${aiSelection}" with luxury finish.`;
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType: "image/jpeg", data: base64Data } }] }],
+            generationConfig: { responseModalities: ["TEXT", "IMAGE"] }
+        })
+    });
+
+    const result = await res.json();
+    const newImg = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+    if(newImg) { imgEl.src = `data:image/png;base64,${newImg}`; showToast("AI Design Success ✨"); }
+  } catch (e) { showToast("AI sedang sibuk."); } finally { loader.style.display = 'none'; }
+}
+
+window.setAIStyle = function(style, btn) {
+  aiSelection = style;
+  btn.parentElement.querySelectorAll('.ai-opt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// START
+initApp();
+showPage('home');
+</script>
+
+<style>
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+</body>
+</html>
